@@ -17,7 +17,3 @@ branches:
   only:
   - dockerized
   - /.*/
-
-
-script:
-    - pytest $PACKAGENAME
