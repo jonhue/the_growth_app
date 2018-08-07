@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 PACKAGES = find_packages()
 
 opts = dict(name="mypackage",
-            maintainer="jonhue",
+            maintainer="jdbohrman",
             maintainer_email="",
             description="Encourage, track & analyze personal growth.",
             long_description="Encourage, track & analyze personal growth.",
