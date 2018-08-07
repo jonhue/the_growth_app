@@ -1,4 +1,6 @@
 language: python
+virtualenv:
+    system_site_packages: true
 
 python:
   - "2.7"
@@ -25,4 +27,4 @@ branches:
   - dockerized
   - /.*/
 
-script: pytest
+script: make test
