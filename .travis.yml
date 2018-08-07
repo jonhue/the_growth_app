@@ -6,9 +6,7 @@ services:
     - docker
 
 before_install:
-    - docker pull jdbohrman/thegrowthapp
-    - docker build -t thegrowthapp .
-    - docker tag jdbohrman/thegrowthapp:latest
+    - docker build -t jdbohrman/thegrowthapp .
     - docker ps -a
     - docker run jdbohrman/thegrowthapp
 
