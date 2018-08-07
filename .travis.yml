@@ -25,4 +25,4 @@ branches:
   - dockerized
   - /.*/
 
-script: make test
+script: py.test
