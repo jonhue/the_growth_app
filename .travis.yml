@@ -17,6 +17,7 @@ matrix:
       node_js:
         - node
       script:
+        - yarn install
         - cd frontend
         - yarn run test
       cache:
