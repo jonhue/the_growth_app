@@ -11,7 +11,7 @@ matrix:
       dist: xenial
       script:
         - cd backend
-        - pytest
+        # - pytest
 
     - language: node_js
       node_js:
