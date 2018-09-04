@@ -5,9 +5,15 @@ module.exports = {
   },
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "indent": [
       "error",
@@ -24,6 +30,9 @@ module.exports = {
     "semi": [
       "error",
       "never"
-    ]
+    ],
+    "no-console": 1,
+    "no-undef": 1,
+    "no-unused-vars": 1
   }
 };
