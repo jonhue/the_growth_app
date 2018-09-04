@@ -21,15 +21,9 @@ using [Webpack](https://webpack.js.org/) with dependencies handled by
 
     Duplicate [.env.sample](.env.sample) to `.env`
 
-4. Database setup
+3. Start development server
 
-    `$ python3 backend/manage.py migrate`
-
-5. Start development server
-
-    ```
-    $ docker-compose up
-    ```
+    `$ docker-compose up`
 
 ### Testing
 
