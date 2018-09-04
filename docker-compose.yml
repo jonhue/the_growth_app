@@ -1,0 +1,36 @@
+version: '2'
+services:
+
+  frontend:
+    build: ./frontend
+    container_name: thegrowthapp_frontend
+    command: yarn run start
+    ports:
+      - '8080:80'
+    volumes:
+     - ./frontend:/app
+    environment:
+      NODE_ENV: development
+
+  backend:
+    build: ./backend
+    container_name: thegrowthapp_backend
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - db_data:/var/lib/postgresql/data
+    environment:
+      RAILS_ENV: development
+
+  db:
+    image: postgres:10.4
+    container_name: thegrowthapp_db
+    ports:
+      - '5432'
+
+volumes:
+  db_data:
