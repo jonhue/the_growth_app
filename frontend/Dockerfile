@@ -1,11 +1,11 @@
-FROM node
+FROM node:9
 MAINTAINER Jonas Hübotter
 
 ENV APP_HOME /app
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-RUN yarn install -g webpack
+RUN npm install -g webpack
 
 # ADD package.json $APP_HOME/
 
