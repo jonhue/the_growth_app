@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node
 MAINTAINER Jonas Hübotter
 
 ENV APP_HOME /app
