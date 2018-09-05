@@ -8,4 +8,4 @@ python:
   - 3.7
 dist: xenial
 script:
-  - pytest
+  - python manage.py test
