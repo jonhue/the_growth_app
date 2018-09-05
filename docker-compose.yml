@@ -2,14 +2,14 @@ version: '3.7'
 services:
 
   backend:
-    build: ./backend
+    build: .
     command: >
       bash -c "python manage.py migrate
       && python manage.py runserver 0.0.0.0:8000"
     ports:
       - 8000:8000
     volumes:
-      - ./backend:/app
+      - .:/app
     depends_on:
       - db
 
@@ -17,6 +17,7 @@ services:
     image: postgres:10.4
     volumes:
       - db_data:/var/lib/postgresql/data/
+    restart: always
 
 volumes:
   db_data:
