@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 services:
 
   backend:
@@ -15,14 +15,9 @@ services:
 
   db:
     image: postgres:10.4
-    ports:
-      - 5432:5432
     volumes:
       - db_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=db
+    restart: always
 
 volumes:
   db_data:
