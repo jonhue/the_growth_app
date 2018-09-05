@@ -7,5 +7,3 @@ language: python
 python:
   - 3.7
 dist: xenial
-script:
-  - python manage.py test
