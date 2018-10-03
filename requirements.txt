@@ -1,2 +1,6 @@
-django
-psycopg2
+Flask
+flask_jwt_extended 
+flask_restful
+marshmallow
+mongoengine
+passlib

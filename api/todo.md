@@ -1,0 +1,7 @@
+- Endopints
+- Serializers
+- Validation
+- Authentication
+- Authorization
+- Revoke token
+- Custom JWT errors

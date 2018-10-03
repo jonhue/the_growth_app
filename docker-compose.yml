@@ -1,23 +1,17 @@
-version: '3.7'
+version: '3.4'
 services:
 
-  backend:
+  api:
     build: .
-    command: >
-      bash -c "python manage.py migrate
-      && python manage.py runserver 0.0.0.0:8000"
+    command: python run.py
     ports:
       - 8000:8000
     volumes:
-      - .:/app
+      - .:/usr/src/app
     depends_on:
-      - db
+      - mongodb
 
-  db:
-    image: postgres:10.4
-    volumes:
-      - db_data:/var/lib/postgresql/data/
-    restart: always
-
-volumes:
-  db_data:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
