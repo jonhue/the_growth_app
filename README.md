@@ -18,7 +18,7 @@ The REST API of The Growth App uses
 
 2. Credentials setup
 
-    Duplicate [.env.sample](.env.sample) to `.env`
+    Customize credentials specified in [Dockerfile](Dockerfile)
 
 3. Start development server
 
