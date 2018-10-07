@@ -1,14 +1,11 @@
-FROM python:3.7
+FROM python:3
 MAINTAINER Jonas Hübotter
 
-ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
-WORKDIR /code
-ADD requirements.txt /code/
-RUN pip install -r requirements.txt
-ADD . /code/
+WORKDIR /usr/src/app
 
-ENV DATABASE_NAME postgres
-ENV DATABASE_USER postgres
-ENV DATABASE_HOST db
-ENV DATABASE_PORT 5432
+ENV SECRET_KEY XXX
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
