@@ -46,8 +46,8 @@ class UserResource(Resource):
             return error_handler('Access forbidden', 403)
 
         try:
-            user
-            # user.update(**request.args)
+            user.update(**request.args.to_dict())
+            user = User.objects.get(username=username)
         except NotUniqueError:
             return error_handler('Uniqueness error', 400)
         except ValidationError:
