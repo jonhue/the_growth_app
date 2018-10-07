@@ -6,13 +6,22 @@ from .models import *
 from .schemas import *
 
 
+def respond(code=200, payload={}, messages=[]):
+    return {
+        'status': 'ok' if int(code/100) == 2 else 'error',
+        'code': code,
+        'messages': messages,
+        'payload': payload,
+    }, code
+
+
 class UserListResource(Resource):
     @jwt_required
     def get(self):
         schema = UserSchema(many=True)
         users = User.objects(private=False)
 
-        return schema.dump(users).data, 200
+        return respond(200, {'users': schema.dump(users).data})
 
 
 class UserResource(Resource):
@@ -21,17 +30,17 @@ class UserResource(Resource):
         try:
             user = User.objects.get(username=username)
         except DoesNotExist:
-            return error_handler('User does not exist', 404)
+            return respond(404, {}, ['User does not exist'])
 
         if get_jwt_identity() == user.username:
             schema = UserSchema()
         else:
             if user.private is True:
-                return error_handler('Access forbidden', 403)
+                return respond(403, {}, ['Access forbidden'])
             else:
                 schema = UserSchema(only=('username', 'name', 'avatar'))
 
-        return schema.dump(user).data, 200
+        return respond(200, {'user': schema.dump(user).data})
 
     @jwt_required
     def put(self, username):
@@ -40,79 +49,78 @@ class UserResource(Resource):
         try:
             user = User.objects.get(username=username)
         except DoesNotExist:
-            return error_handler('User does not exist', 404)
+            return respond(404, {}, ['User does not exist'])
 
         if get_jwt_identity() != user.username:
-            return error_handler('Access forbidden', 403)
+            return respond(403, {}, ['Access forbidden'])
 
         try:
-            user.update(**request.args.to_dict())
+            user.update(**schema.load(request.args).data)
+            # Return updated document
             user = User.objects.get(username=username)
         except NotUniqueError:
-            return error_handler('Uniqueness error', 400)
+            return respond(400, {}, ['Uniqueness error'])
         except ValidationError:
-            return error_handler('Validation error', 400)
+            return respond(400, {}, ['Validation error'])
 
-        return schema.dump(user).data, 200
+        return respond(200, {'user': schema.dump(user).data})
 
     @jwt_required
     def delete(self, username):
         try:
             user = User.objects.get(username=username)
         except DoesNotExist:
-            return error_handler('User does not exist', 404)
+            return respond(404, {}, ['User does not exist'])
 
         if get_jwt_identity() != user.username:
-            return error_handler('Access forbidden', 403)
+            return respond(403, {}, ['Access forbidden'])
 
         user.delete()
-        return '', 204
+        return respond(204)
 
 
 class UserRegistrationResource(Resource):
     def post(self):
         schema = UserSchema()
-        user = schema.load(request.args).data
+        user = User(**schema.load(request.args).data)
         user.password = User.generate_hash(request.args['password'])
 
         try:
             user.save()
         except NotUniqueError:
-            return error_handler('Uniqueness error', 400)
+            return respond(400, {}, ['Uniqueness error'])
         except ValidationError:
-            return error_handler('Validation error', 400)
+            return respond(400, {}, ['Validation error'])
 
         access_token = create_access_token(identity=request.args['username'])
         refresh_token = create_refresh_token(identity=request.args['username'])
 
-        return {
+        return respond(201, {
             'access_token': access_token,
             'refresh_token': refresh_token,
-            'metadata': schema.dump(user).data,
-        }, 201
+            'user': schema.dump(user).data,
+        })
 
 
 class UserLoginResource(Resource):
     def post(self):
         schema = UserSchema()
-        user = schema.load(request.args).data
-        user.password = User.generate_hash(request.args['password'])
 
         try:
             user = User.objects.get(username=request.args['username'])
         except DoesNotExist:
-            return error_handler('User does not exist', 404)
+            return respond(404, {}, ['User does not exist'])
 
         if User.verify_hash(request.args['password'], user.password):
             access_token = create_access_token(identity=request.args['username'])
             refresh_token = create_refresh_token(identity=request.args['username'])
-            return {
+            return respond(200, {
                 'access_token': access_token,
                 'refresh_token': refresh_token,
-                'metadata': schema.dump(user).data,
-            }
+                'user': schema.dump(user).data,
+            })
         else:
-            return error_handler('Wrong credentials', 401)
+            return respond(400, {}, ['Wrong credentials'])
 
 
 class RefreshTokenResource(Resource):
@@ -120,13 +128,4 @@ class RefreshTokenResource(Resource):
     def post(self):
         username = get_jwt_identity()
         access_token = create_access_token(identity=username)
-        return {'access_token': access_token}
-
-
-
-
-def error_handler(e, status):
-    return {
-        'status': status,
-        'message': e,
-    }, status
+        return respond(200, {'access_token': access_token})

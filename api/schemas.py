@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields
 
 from .models import *
 
@@ -8,7 +8,3 @@ class UserSchema(Schema):
     class Meta:
         fields = ('username', 'email', 'name', 'avatar', 'private', 'notifications', 'language', 'created_at')
         ordered = True
-
-    @post_load
-    def make_user(self, data):
-        return User(**data)
