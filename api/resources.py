@@ -58,10 +58,10 @@ class UserResource(Resource):
             user.update(**schema.load(request.args).data)
             # Return updated document
             user = User.objects.get(username=username)
-        except NotUniqueError:
-            return respond(400, {}, ['Uniqueness error'])
-        except ValidationError:
-            return respond(400, {}, ['Validation error'])
+        except NotUniqueError as e:
+            return respond(400, {}, ['Uniqueness error', str(e)])
+        except ValidationError as e:
+            return respond(400, {}, ['Validation error', str(e)])
 
         return respond(200, {'user': schema.dump(user).data})
 
@@ -87,10 +87,10 @@ class UserRegistrationResource(Resource):
 
         try:
             user.save()
-        except NotUniqueError:
-            return respond(400, {}, ['Uniqueness error'])
-        except ValidationError:
-            return respond(400, {}, ['Validation error'])
+        except NotUniqueError as e:
+            return respond(400, {}, ['Uniqueness error', str(e)])
+        except ValidationError as e:
+            return respond(400, {}, ['Validation error', str(e)])
 
         access_token = create_access_token(identity=request.args['username'])
         refresh_token = create_refresh_token(identity=request.args['username'])
