@@ -15,10 +15,11 @@ def respond(code=200, payload={}, messages=[]):
     }, code
 
 
+
 class UserListResource(Resource):
     @jwt_required
     def get(self):
-        schema = UserSchema(many=True)
+        schema = UserSchema(many=True, only=('username', 'name', 'avatar'))
         users = User.objects(private=False)
 
         return respond(200, {'users': schema.dump(users).data})
@@ -129,3 +130,73 @@ class RefreshTokenResource(Resource):
         username = get_jwt_identity()
         access_token = create_access_token(identity=username)
         return respond(200, {'access_token': access_token})
+
+
+
+class GrowthbookListResource(Resource):
+    @jwt_required
+    def post(self):
+        schema = GrowthbookSchema()
+        growthbook = Growthbook(**schema.load(request.args).data)
+        growthbook.user = User.objects.get(username=request.args['user'])
+
+        try:
+            growthbook.save()
+        except NotUniqueError as e:
+            return respond(400, {}, ['Uniqueness error', str(e)])
+        except ValidationError as e:
+            return respond(400, {}, ['Validation error', str(e)])
+
+        return respond(201, {'growthbook': schema.dump(growthbook).data})
+
+
+class GrowthbookResource(Resource):
+    @jwt_required
+    def get(self, id):
+        try:
+            growthbook = Growthbook.objects.get(id=id)
+        except (DoesNotExist, ValidationError):
+            return respond(404, {}, ['Growthbook does not exist'])
+
+        if get_jwt_identity() == growthbook.user.username:
+            schema = GrowthbookSchema()
+        else:
+            return respond(403, {}, ['Access forbidden'])
+
+        return respond(200, {'growthbook': schema.dump(growthbook).data})
+
+    @jwt_required
+    def put(self, id):
+        schema = GrowthbookSchema()
+
+        try:
+            growthbook = Growthbook.objects.get(id=id)
+        except (DoesNotExist, ValidationError):
+            return respond(404, {}, ['Growthbook does not exist'])
+
+        if get_jwt_identity() != growthbook.user.username:
+            return respond(403, {}, ['Access forbidden'])
+
+        try:
+            growthbook.update(**schema.load(request.args).data)
+            # Return updated document
+            growthbook = Growthbook.objects.get(id=id)
+        except NotUniqueError as e:
+            return respond(400, {}, ['Uniqueness error', str(e)])
+        except ValidationError as e:
+            return respond(400, {}, ['Validation error', str(e)])
+
+        return respond(200, {'growthbook': schema.dump(growthbook).data})
+
+    @jwt_required
+    def delete(self, id):
+        try:
+            growthbook = Growthbook.objects.get(id=id)
+        except (DoesNotExist, ValidationError):
+            return respond(404, {}, ['Growthbook does not exist'])
+
+        if get_jwt_identity() != growthbook.user.username:
+            return respond(403, {}, ['Access forbidden'])
+
+        growthbook.delete()
+        return respond(204)

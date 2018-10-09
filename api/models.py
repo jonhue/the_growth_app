@@ -27,49 +27,52 @@ class User(Document):
 
 
 class Collaboration(EmbeddedDocument):
+    INITIAL_STATE = 'proposed'
+    STATES = [INITIAL_STATE, 'accepted']
+
     inviter = ReferenceField(User)
     invited = ReferenceField(User)
-    state = StringField(required=True, default='proposed')
+    state = StringField(required=True, default=INITIAL_STATE)
     position = IntField(required=True)
     notifications = BooleanField(required=True, default=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 
-    states = ['proposed', 'accepted']
-
     def __init__(self, *args, **kwargs):
         Document.__init__(self, *args, **kwargs)
 
-        self.machine = Machine(model=self, states=Collaboration.states)
+        self.machine = Machine(model=self, states=Collaboration.STATES, initial=Collaboration.INITIAL_STATE)
         self.macine.add_transition('accept', 'proposed', 'accepted')
 
 
 class Growthbook(Document):
+    INITIAL_STATE = 'active'
+    STATES = [INITIAL_STATE, 'archived']
+
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     collaborations = ListField(EmbeddedDocumentField(Collaboration))
-    state = StringField(required=True, default='active')
+    state = StringField(required=True, default=INITIAL_STATE)
     name = StringField(required=True)
     position = IntField(required=True)
     notifications = BooleanField(required=True, default=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 
-    states = ['active', 'archived']
-
     def __init__(self, *args, **kwargs):
         Document.__init__(self, *args, **kwargs)
 
-        self.machine = Machine(model=self, states=Growthbook.states)
+        self.machine = Machine(model=self, states=Growthbook.STATES, initial=Growthbook.INITIAL_STATE)
         self.machine.add_transition('archive', 'active', 'archived')
 
 
 
 class Scheduling(EmbeddedDocument):
-    type = StringField(required=True, default='')
+    DEFAULT_TYPE = ''
+    TYPES = [DEFAULT_TYPE, '']
+
+    type = StringField(required=True, default=DEFAULT_TYPE)
     time = DateTimeField(required=True)
     ends_at = DateTimeField()
     ands_after = IntField()
     created_at = DateTimeField(required=True, default=dt.datetime.now())
-
-    types = ['']
 
 
 class Event(EmbeddedDocument):
@@ -90,21 +93,23 @@ class Log(EmbeddedDocument):
 
 
 class Task(Document):
+    INITIAL_STATE = 'active'
+    STATES = [INITIAL_STATE, 'done']
+
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     growthbook = ReferenceField(Growthbook, reverse_delete_rule=CASCADE, required=True)
     scheduling = EmbeddedDocumentField(Scheduling)
     events = SortedListField(EmbeddedDocumentField(Event))
-    state = StringField(required=True, default='active')
+    state = StringField(required=True, default=INITIAL_STATE)
     position = IntField(required=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 
-    states = ['active', 'done']
     meta = {'allow_inheritance': True}
 
     def __init__(self, *args, **kwargs):
         Document.__init__(self, *args, **kwargs)
 
-        self.machine = Machine(model=self, states=Task.states)
+        self.machine = Machine(model=self, states=Task.STATES, initial=Task.INITIAL_STATE)
         self.machine.add_transition('complete', 'active', 'done')
 
 
@@ -120,13 +125,15 @@ class ActionItem(Task):
 
 
 class Metric(Document):
+    DEFAULT_TYPE = ''
+    TYPES = [DEFAULT_TYPE, '']
+    DEFAULT_INTERVAL = 'monthly'
+    INTERVALS = ['weekly', DEFAULT_INTERVAL, 'yearly']
+
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     growthbook = ReferenceField(Growthbook, reverse_delete_rule=CASCADE, required=True)
     item = GenericReferenceField(required=True)
-    type = StringField(required=True, default='')
-    interval = StringField(required=True, default='monthly')
+    type = StringField(required=True, default=DEFAULT_TYPE)
+    interval = StringField(required=True, default=DEFAULT_INTERVAL)
     attributes = SortedListField(StringField())
     created_at = DateTimeField(required=True, default=dt.datetime.now())
-
-    types = ['']
-    intervals = ['weekly', 'monthly', 'yearly']
