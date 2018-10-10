@@ -22,6 +22,8 @@ api.add_resource(UserLoginResource, '/auth/login')
 api.add_resource(RefreshTokenResource, '/auth/refresh_token')
 api.add_resource(GrowthbookListResource, '/growthbooks')
 api.add_resource(GrowthbookResource, '/growthbooks/<string:id>')
+api.add_resource(GoalListResource, '/goals')
+api.add_resource(GoalResource, '/goals/<string:id>')
 
 
 

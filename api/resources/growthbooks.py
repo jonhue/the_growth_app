@@ -13,7 +13,7 @@ class GrowthbookListResource(Resource):
     def post(self):
         schema = GrowthbookSchema()
         growthbook = Growthbook(**schema.load(request.args).data)
-        growthbook.user = User.objects.get(username=request.args['user'])
+        growthbook.user = User.objects.get(username=get_jwt_identity())
 
         try:
             growthbook.save()
@@ -33,7 +33,7 @@ class GrowthbookResource(Resource):
         except (DoesNotExist, ValidationError):
             return respond(404, {}, ['Growthbook does not exist'])
 
-        if get_jwt_identity() == growthbook.user.username:
+        if get_jwt_identity() in growthbook.collaborating_identities():
             schema = GrowthbookSchema()
         else:
             return respond(403, {}, ['Access forbidden'])
@@ -42,14 +42,14 @@ class GrowthbookResource(Resource):
 
     @jwt_required
     def put(self, id):
-        schema = GrowthbookSchema()
-
         try:
             growthbook = Growthbook.objects.get(id=id)
         except (DoesNotExist, ValidationError):
             return respond(404, {}, ['Growthbook does not exist'])
 
-        if get_jwt_identity() != growthbook.user.username:
+        if get_jwt_identity() in growthbook.collaborating_identities():
+            schema = GrowthbookSchema()
+        else:
             return respond(403, {}, ['Access forbidden'])
 
         try:
@@ -70,7 +70,7 @@ class GrowthbookResource(Resource):
         except (DoesNotExist, ValidationError):
             return respond(404, {}, ['Growthbook does not exist'])
 
-        if get_jwt_identity() != growthbook.user.username:
+        if get_jwt_identity() not in growthbook.collaborating_identities():
             return respond(403, {}, ['Access forbidden'])
 
         growthbook.delete()

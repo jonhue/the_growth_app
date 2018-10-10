@@ -37,14 +37,14 @@ class UserResource(Resource):
 
     @jwt_required
     def put(self, username):
-        schema = UserSchema()
-
         try:
             user = User.objects.get(username=username)
         except DoesNotExist:
             return respond(404, {}, ['User does not exist'])
 
-        if get_jwt_identity() != user.username:
+        if get_jwt_identity() == user.username:
+            schema = UserSchema()
+        else:
             return respond(403, {}, ['Access forbidden'])
 
         try:
