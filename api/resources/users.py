@@ -11,7 +11,7 @@ from .responses import respond
 class UserListResource(Resource):
     @jwt_required
     def get(self):
-        schema = UserSchema(many=True, only=('username', 'name', 'avatar'))
+        schema = UserSchema(many=True, only=UserSchema.Meta.COMPACT_FIELDS)
         users = User.objects(private=False)
 
         return respond(200, {'users': schema.dump(users).data})
@@ -31,7 +31,7 @@ class UserResource(Resource):
             if user.private is True:
                 return respond(403, {}, ['Access forbidden'])
             else:
-                schema = UserSchema(only=('username', 'name', 'avatar'))
+                schema = UserSchema(only=UserSchema.Meta.COMPACT_FIELDS)
 
         return respond(200, {'user': schema.dump(user).data})
 

@@ -2,8 +2,10 @@ import datetime as dt
 from mongoengine import *
 
 from .task import Task
+from .goal import Goal
 
 
 class ActionItem(Task):
-    parent = GenericReferenceField(required=True)
+    parent = ReferenceField('self', reverse_delete_rule=CASCADE)
+    goal = ReferenceField(Goal, reverse_delete_rule=CASCADE)
     title = StringField(required=True)

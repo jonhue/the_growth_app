@@ -8,5 +8,5 @@ from .log_attachment import LogAttachment
 class Log(EmbeddedDocument):
     user = ReferenceField(User, required=True)
     content = StringField()
-    attachment = EmbeddedDocumentField(LogAttachment)
+    attachments = SortedListField(EmbeddedDocumentField(LogAttachment))
     created_at = DateTimeField(required=True, default=dt.datetime.now())
