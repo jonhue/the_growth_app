@@ -2,7 +2,7 @@ from flask import request
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_refresh_token_required
 from flask_restful import Resource
 
-from ..models import User
+from ..models import User, Client
 from ..schemas import UserSchema
 
 from .responses import respond
@@ -16,9 +16,7 @@ class UserRegistrationResource(Resource):
 
         try:
             user.save()
-        except NotUniqueError as e:
-            return respond(400, {}, ['Uniqueness error', str(e)])
-        except ValidationError as e:
+        except (NotUniqueError, ValidationError) as e:
             return respond(400, {}, ['Validation error', str(e)])
 
         access_token = create_access_token(identity=request.args['username'])
@@ -43,6 +41,7 @@ class UserLoginResource(Resource):
         if User.verify_hash(request.args['password'], user.password):
             access_token = create_access_token(identity=request.args['username'])
             refresh_token = create_refresh_token(identity=request.args['username'])
+
             return respond(200, {
                 'access_token': access_token,
                 'refresh_token': refresh_token,

@@ -8,3 +8,6 @@ from .log import Log
 from .goal import Goal
 from .action_item import ActionItem
 from .metric import Metric
+from .client import Client
+from .webhook_event import WebhookEvent
+from .webhook_subscription import WebhookSubscription

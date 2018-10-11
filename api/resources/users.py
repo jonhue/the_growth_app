@@ -51,9 +51,7 @@ class UserResource(Resource):
             user.update(**schema.load(request.args).data)
             # Return updated document
             user = User.objects.get(username=username)
-        except NotUniqueError as e:
-            return respond(400, {}, ['Uniqueness error', str(e)])
-        except ValidationError as e:
+        except (NotUniqueError, ValidationError) as e:
             return respond(400, {}, ['Validation error', str(e)])
 
         return respond(200, {'user': schema.dump(user).data})

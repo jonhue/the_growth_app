@@ -24,5 +24,8 @@ class Growthbook(Document):
         self.machine = Machine(model=self, states=Growthbook.STATES, initial=Growthbook.INITIAL_STATE)
         self.machine.add_transition('archive', 'active', 'archived')
 
+    def collaborating_users(self):
+        return [self.user] + list(collaboration.user for collaboration in self.collaborations)
+
     def collaborating_identities(self):
-        return [self.user.username] + list(collaboration.user.username for collaboration in self.collaborations)
+        return list(user.username for user in self.collaborating_users())

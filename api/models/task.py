@@ -20,7 +20,7 @@ class Task(Document):
     position = IntField(required=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 
-    meta = {'allow_inheritance': True}
+    meta = {'abstract': True}
 
     def __init__(self, *args, **kwargs):
         Document.__init__(self, *args, **kwargs)

@@ -24,6 +24,10 @@ api.add_resource(GrowthbookListResource, '/growthbooks')
 api.add_resource(GrowthbookResource, '/growthbooks/<string:id>')
 api.add_resource(GoalListResource, '/goals')
 api.add_resource(GoalResource, '/goals/<string:id>')
+api.add_resource(ActionItemListResource, '/action_items')
+api.add_resource(ActionItemResource, '/action_items/<string:id>')
+api.add_resource(ClientListResource, '/clients')
+api.add_resource(ClientResource, '/clients/<string:id>')
 
 
 

@@ -14,13 +14,17 @@ class GoalListResource(Resource):
         schema = GoalSchema()
         goal = Goal(**schema.load(request.args).data)
         goal.user = User.objects.get(username=get_jwt_identity())
-        goal.growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+        try:
+            goal.growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+        except (DoesNotExist, ValidationError) as e:
+            return respond(404, {}, ['Growthbook does not exist', str(e)])
+
+        if get_jwt_identity() not in goal.growthbook.collaborating_identities():
+            return respond(403, {}, ['Access forbidden'])
 
         try:
             goal.save()
-        except NotUniqueError as e:
-            return respond(400, {}, ['Uniqueness error', str(e)])
-        except ValidationError as e:
+        except (NotUniqueError, ValidationError) as e:
             return respond(400, {}, ['Validation error', str(e)])
 
         return respond(201, {'goal': schema.dump(goal).data})
@@ -57,9 +61,7 @@ class GoalResource(Resource):
             goal.update(**schema.load(request.args).data)
             # Return update document
             goal = Goal.objects.get(id=id)
-        except NotUniqueError as e:
-            return respond(400, {}, ['Uniqueness error', str(e)])
-        except ValidationError as e:
+        except (NotUniqueError, ValidationError) as e:
             return respond(400, {}, ['Validation error', str(e)])
 
         return respond(200, {'goal': schema.dump(goal).data})

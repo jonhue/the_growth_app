@@ -17,9 +17,7 @@ class GrowthbookListResource(Resource):
 
         try:
             growthbook.save()
-        except NotUniqueError as e:
-            return respond(400, {}, ['Uniqueness error', str(e)])
-        except ValidationError as e:
+        except (NotUniqueError, ValidationError) as e:
             return respond(400, {}, ['Validation error', str(e)])
 
         return respond(201, {'growthbook': schema.dump(growthbook).data})
@@ -56,9 +54,7 @@ class GrowthbookResource(Resource):
             growthbook.update(**schema.load(request.args).data)
             # Return updated document
             growthbook = Growthbook.objects.get(id=id)
-        except NotUniqueError as e:
-            return respond(400, {}, ['Uniqueness error', str(e)])
-        except ValidationError as e:
+        except (NotUniqueError, ValidationError) as e:
             return respond(400, {}, ['Validation error', str(e)])
 
         return respond(200, {'growthbook': schema.dump(growthbook).data})
