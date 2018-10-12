@@ -10,6 +10,14 @@ from .responses import respond
 
 class GrowthbookListResource(Resource):
     @jwt_required
+    def get(self):
+        schema = GrowthbookSchema(many=True, only=Fields.Growthbook.compact)
+        user = User.objects.get(username=get_jwt_identity())
+        growthbooks = Growthbook.objects(user=user)
+
+        return respond(200, {'growthbooks': schema.dump(growthbooks).data})
+
+    @jwt_required
     def post(self):
         schema = GrowthbookSchema()
         growthbook = Growthbook(**schema.load(request.args).data)

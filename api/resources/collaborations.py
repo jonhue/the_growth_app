@@ -10,6 +10,20 @@ from .responses import respond
 
 class CollaborationListResource(Resource):
     @jwt_required
+    def get(self):
+        schema = CollaborationSchema(many=True, only=Fields.Collaboration.compact)
+        try:
+            growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+        except (DoesNotExist, ValidationError) as e:
+            return respond(404, {}, ['Growthbook does not exist', str(e)])
+        collaborations = growthbook.collaborations
+
+        if get_jwt_identity() not in growthbook.collaborating_identities():
+            return respond(403, {}, ['Access forbidden'])
+
+        return respond(200, {'collaborations': schema.dump(collaborations).data})
+
+    @jwt_required
     def post(self):
         schema = CollaborationSchema()
         collaboration = Collaboration(**schema.load(request.args).data)

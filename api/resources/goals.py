@@ -10,6 +10,20 @@ from .responses import respond
 
 class GoalListResource(Resource):
     @jwt_required
+    def get(self):
+        schema = GoalSchema(many=True, only=Fields.Goal.compact)
+        try:
+            growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+        except (DoesNotExist, ValidationError) as e:
+            return respond(404, {}, ['Growthbook does not exist', str(e)])
+        goals = Goal.objects(growthbook=growthbook)
+
+        if get_jwt_identity() not in growthbook.collaborating_identities():
+            return respond(403, {}, ['Access forbidden'])
+
+        return respond(200, {'goals': schema.dump(goals).data})
+
+    @jwt_required
     def post(self):
         schema = GoalSchema()
         goal = Goal(**schema.load(request.args).data)

@@ -2,7 +2,7 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restful import Resource
 
-from ..models import Event
+from ..models import Event, Growthbook, Goal, ActionItem
 from ..schemas import EventSchema
 
 from .responses import respond
@@ -10,10 +10,36 @@ from .responses import respond
 
 class EventListResource(Resource):
     @jwt_required
+    def get(self):
+        schema = EventSchema(many=True, only=Fields.Event.compact)
+        if 'growthbook_id' in request.args:
+            try:
+                growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+            except (DoesNotExist, ValidationError) as e:
+                return respond(404, {}, ['Growthbook does not exist', str(e)])
+            events = Event.objects(growthbook=growthbook)
+        else:
+            try:
+                task = globals()[request.args['task_type']].objects.get(id=request.args['task_id'])
+            except (DoesNotExist, ValidationError) as e:
+                return respond(404, {}, ['Task does not exist', str(e)])
+            growthbook = task.growthbook
+            metrics = task.events
+
+        if get_jwt_identity() not in growthbook.collaborating_identities():
+            return respond(403, {}, ['Access forbidden'])
+
+        return respond(200, {'events': schema.dump(events).data})
+
+    @jwt_required
     def post(self):
         schema = EventSchema()
         event = Event(**schema.load(request.args).data)
         event.user = User.objects.get(username=get_jwt_identity())
+        try:
+            event.growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+        except (DoesNotExist, ValidationError) as e:
+            return respond(404, {}, ['Growthbook does not exist', str(e)])
         try:
             task = globals()[request.args['task_type']].objects.get(id=request.args['task_id'])
         except (DoesNotExist, ValidationError) as e:

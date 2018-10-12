@@ -10,6 +10,28 @@ from .responses import respond
 
 class ActionItemListResource(Resource):
     @jwt_required
+    def get(self):
+        schema = ActionItemSchema(many=True, only=Fields.ActionItem.compact)
+        if 'growthbook_id' in request.args:
+            try:
+                growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
+            except (DoesNotExist, ValidationError) as e:
+                return respond(404, {}, ['Growthbook does not exist', str(e)])
+            action_items = ActionItem.objects(growthbook=growthbook)
+        else:
+            try:
+                action_item = ActionItem.objects.get(id=request.args['action_item_id'])
+            except (DoesNotExist, ValidationError) as e:
+                return respond(404, {}, ['Action item does not exist', str(e)])
+            growthbook = action_item.growthbook
+            action_items = ActionItem.objects(parent=action_item)
+
+        if get_jwt_identity() not in growthbook.collaborating_identities():
+            return respond(403, {}, ['Access forbidden'])
+
+        return respond(200, {'action_items': schema.dump(action_items).data})
+
+    @jwt_required
     def post(self):
         schema = ActionItemSchema()
         action_item = ActionItem(**schema.load(request.args).data)

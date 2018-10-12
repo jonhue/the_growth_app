@@ -13,7 +13,7 @@ class Metric(Document):
 
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     growthbook = ReferenceField(Growthbook, reverse_delete_rule=CASCADE, required=True)
-    item = GenericReferenceField(required=True)
+    item = GenericReferenceField()
     type = StringField(required=True, default=DEFAULT_TYPE)
     interval = StringField(required=True, default=DEFAULT_INTERVAL)
     attributes = SortedListField(StringField())
