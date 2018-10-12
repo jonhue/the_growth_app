@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+from .fields import Fields
+
 
 class UserSchema(Schema):
     private = fields.Boolean()
@@ -7,8 +9,5 @@ class UserSchema(Schema):
     created_at = fields.DateTime(dump_only=True)
 
     class Meta(object):
-        DEFAULT_FIELDS = ('username', 'email', 'name', 'avatar', 'private', 'notifications', 'language', 'created_at')
-        COMPACT_FIELDS = ('username', 'name', 'avatar')
-
-        fields = DEFAULT_FIELDS
+        fields = Fields.User.default
         ordered = True

@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 
+from .fields import Fields
+
 
 class SchedulingSchema(Schema):
     id = fields.String(dump_only=True)
@@ -9,8 +11,5 @@ class SchedulingSchema(Schema):
     created_at = fields.DateTime(dump_only=True)
 
     class Meta:
-        DEFAULT_FIELDS = ('id', 'type', 'time', 'ends_at', 'ends_after', 'created_at')
-        COMPACT_FIELDS = ('id', 'type', 'time', 'ends_at', 'ends_after')
-
-        fields = DEFAULT_FIELDS
+        fields = Fields.Scheduling.default
         ordered = True

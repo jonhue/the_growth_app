@@ -1,8 +1,8 @@
 import datetime as dt
 from mongoengine import *
 
-from .user import User
 from .log_attachment import LogAttachment
+from .user import User
 
 
 class Log(EmbeddedDocument):

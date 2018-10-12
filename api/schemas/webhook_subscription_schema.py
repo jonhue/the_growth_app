@@ -1,21 +1,16 @@
 from marshmallow import Schema, fields
 
-from .user_schema import UserSchema
-from .client_schema import ClientSchema
-from .webhook_event_schema import WebhookEventSchema
+from .fields import Fields
 
 
 class WebhookSubscriptionSchema(Schema):
     id = fields.String(dump_only=True)
-    client = fields.Nested(ClientSchema, only=ClientSchema.Meta.COMPACT_FIELDS)
-    user = fields.Nested(UserSchema, only=UserSchema.Meta.COMPACT_FIELDS)
+    client = fields.Nested('ClientSchema', only=Fields.Client.compact)
+    user = fields.Nested('UserSchema', only=Fields.User.compact)
     # event_types
-    events = fields.Nested(WebhookEventSchema, many=True, only=WebhookEventSchema.Meta.COMPACT_FIELDS)
+    events = fields.Nested('WebhookEventSchema', many=True, only=Fields.WebhookEvent.compact)
     created_at = fields.DateTime(dump_only=True)
 
     class Meta:
-        DEFAULT_FIELDS = ('id', 'client', 'user', 'url', 'event_types', 'events', 'created_at')
-        COMPACT_FIELDS = ('id', 'url', 'event_types')
-
-        fields = DEFAULT_FIELDS
+        fields = Fields.WebhookSubscription.default
         ordered = True

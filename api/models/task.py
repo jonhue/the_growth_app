@@ -2,10 +2,10 @@ import datetime as dt
 from mongoengine import *
 from transitions import Machine
 
-from .user import User
+from .event import Event
 from .growthbook import Growthbook
 from .scheduling import Scheduling
-from .event import Event
+from .user import User
 
 
 class Task(Document):

@@ -2,8 +2,8 @@ import datetime as dt
 from mongoengine import *
 from transitions import Machine
 
-from .user import User
 from .collaboration import Collaboration
+from .user import User
 
 
 class Growthbook(Document):

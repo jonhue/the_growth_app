@@ -3,7 +3,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restful import Resource
 
 from ..models import User
-from ..schemas import UserSchema
+from ..schemas import UserSchema, Fields
 
 from .responses import respond
 
@@ -11,7 +11,7 @@ from .responses import respond
 class UserListResource(Resource):
     @jwt_required
     def get(self):
-        schema = UserSchema(many=True, only=UserSchema.Meta.COMPACT_FIELDS)
+        schema = UserSchema(many=True, only=Fields.User.compact)
         users = User.objects(private=False)
 
         return respond(200, {'users': schema.dump(users).data})
@@ -31,7 +31,7 @@ class UserResource(Resource):
             if user.private is True:
                 return respond(403, {}, ['Access forbidden'])
             else:
-                schema = UserSchema(only=UserSchema.Meta.COMPACT_FIELDS)
+                schema = UserSchema(only=Fields.User.compact)
 
         return respond(200, {'user': schema.dump(user).data})
 

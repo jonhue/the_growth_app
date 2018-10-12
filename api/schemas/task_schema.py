@@ -1,17 +1,14 @@
 from marshmallow import Schema, fields
 
-from .user_schema import UserSchema
-from .growthbook_schema import GrowthbookSchema
-from .scheduling_schema import SchedulingSchema
-from .event_schema import EventSchema
+from .fields import Fields
 
 
 class TaskSchema(Schema):
     id = fields.String(dump_only=True)
-    user = fields.Nested(UserSchema, only=UserSchema.Meta.COMPACT_FIELDS)
-    growthbook = fields.Nested(GrowthbookSchema, only=GrowthbookSchema.Meta.COMPACT_FIELDS)
-    scheduling = fields.Nested(SchedulingSchema, only=SchedulingSchema.Meta.COMPACT_FIELDS)
-    events = fields.Nested(EventSchema, many=True, only=EventSchema.Meta.COMPACT_FIELDS)
+    user = fields.Nested('UserSchema', only=Fields.User.compact)
+    growthbook = fields.Nested('GrowthbookSchema', only=Fields.Growthbook.compact)
+    scheduling = fields.Nested('SchedulingSchema', only=Fields.Scheduling.compact)
+    events = fields.Nested('EventSchema', many=True, only=Fields.Event.compact)
     state = fields.String(dump_only=True)
     position = fields.Integer()
     created_at = fields.DateTime(dump_only=True)

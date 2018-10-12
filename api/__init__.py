@@ -28,6 +28,8 @@ api.add_resource(ActionItemListResource, '/action_items')
 api.add_resource(ActionItemResource, '/action_items/<string:id>')
 api.add_resource(ClientListResource, '/clients')
 api.add_resource(ClientResource, '/clients/<string:id>')
+api.add_resource(WebhookSubscriptionListResource, '/webhooks')
+api.add_resource(WebhookSubscriptionResource, '/webhooks/<string:id>')
 
 
 

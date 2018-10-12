@@ -5,9 +5,7 @@ from .user import User
 from .webhook_subscription import WebhookSubscription
 
 
-class WebhookEvent(EmbeddedDocument):
-    TYPES = ['event.created']
-
+class WebhookEvent(Document):
     users = ListField(ReferenceField(User))
     type = StringField(required=True)
     payload = DictField(required=True)

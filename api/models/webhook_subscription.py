@@ -2,17 +2,18 @@ import datetime as dt
 import requests
 from mongoengine import *
 
-from .user import User
 from .client import Client
-from .webhook_event import WebhookEvent
+from .user import User
 
 
-class WebhookSubscription(EmbeddedDocument):
-    client = ReferenceField(Client, required=True)
-    user = ReferenceField(User, required=True)
+class WebhookSubscription(Document):
+    EVENT_TYPES = ['event.created']
+
+    client = ReferenceField(Client, reverse_delete_rule=CASCADE, required=True)
+    user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     url = URLField(required=True)
-    event_types = ListField(StringField, required=True, default=WebhookEvent.TYPES)
-    events = SortedListField(ReferenceField(WebhookEvent))
+    event_types = ListField(StringField, required=True, default=EVENT_TYPES)
+    events = SortedListField(ReferenceField('WebhookEvent'))
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 
     def send(self, event):

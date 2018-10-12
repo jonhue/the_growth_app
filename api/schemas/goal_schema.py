@@ -1,15 +1,13 @@
 from marshmallow import fields
 
 from .task_schema import TaskSchema
-from .log_schema import LogSchema
+
+from .fields import Fields
 
 
 class GoalSchema(TaskSchema):
-    logs = fields.Nested(LogSchema, many=True, only=LogSchema.Meta.COMPACT_FIELDS)
+    logs = fields.Nested('LogSchema', many=True, only=Fields.Log.compact)
 
     class Meta:
-        DEFAULT_FIELDS = ('id', 'user', 'growthbook', 'scheduling', 'events', 'logs', 'name', 'state', 'position', 'created_at')
-        COMPACT_FIELDS = ('id', 'name', 'state')
-
-        fields = DEFAULT_FIELDS
+        fields = Fields.Goal.default
         ordered = True

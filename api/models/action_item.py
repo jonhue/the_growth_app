@@ -1,8 +1,8 @@
 import datetime as dt
 from mongoengine import *
 
-from .task import Task
 from .goal import Goal
+from .task import Task
 
 
 class ActionItem(Task):

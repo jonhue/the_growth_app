@@ -1,8 +1,8 @@
 import datetime as dt
 from mongoengine import *
 
-from .user import User
 from .growthbook import Growthbook
+from .user import User
 
 
 class Metric(Document):

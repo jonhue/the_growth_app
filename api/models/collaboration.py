@@ -9,8 +9,8 @@ class Collaboration(EmbeddedDocument):
     INITIAL_STATE = 'proposed'
     STATES = [INITIAL_STATE, 'accepted']
 
-    inviter = ReferenceField(User)
-    invited = ReferenceField(User)
+    inviter = ReferenceField(User, required=True)
+    invited = ReferenceField(User, required=True)
     state = StringField(required=True, default=INITIAL_STATE)
     position = IntField(required=True)
     notifications = BooleanField(required=True, default=True)
