@@ -5,6 +5,7 @@ from .fields import Fields
 
 class SchedulingSchema(Schema):
     id = fields.String(dump_only=True)
+    user = fields.Nested('UserSchema', only=Fields.User.compact)
     time = fields.DateTime()
     ends_at = fields.DateTime()
     ends_after = fields.Integer()

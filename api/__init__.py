@@ -15,19 +15,29 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 jwt = JWTManager(app)
 api = Api(app)
 
-api.add_resource(UserListResource, '/users')
-api.add_resource(UserResource, '/users/<string:username>')
-api.add_resource(UserRegistrationResource, '/auth/signup')
-api.add_resource(UserLoginResource, '/auth/login')
-api.add_resource(RefreshTokenResource, '/auth/refresh_token')
-api.add_resource(GrowthbookListResource, '/growthbooks')
-api.add_resource(GrowthbookResource, '/growthbooks/<string:id>')
-api.add_resource(GoalListResource, '/goals')
-api.add_resource(GoalResource, '/goals/<string:id>')
 api.add_resource(ActionItemListResource, '/action_items')
 api.add_resource(ActionItemResource, '/action_items/<string:id>')
 api.add_resource(ClientListResource, '/clients')
 api.add_resource(ClientResource, '/clients/<string:id>')
+api.add_resource(CollaborationListResource, '/collaborations')
+api.add_resource(CollaborationResource, '/collaborations/<string:id>')
+api.add_resource(EventListResource, '/events')
+api.add_resource(EventResource, '/events/<string:id>')
+api.add_resource(GoalListResource, '/goals')
+api.add_resource(GoalResource, '/goals/<string:id>')
+api.add_resource(GrowthbookListResource, '/growthbooks')
+api.add_resource(GrowthbookResource, '/growthbooks/<string:id>')
+api.add_resource(LogListResource, '/logs')
+api.add_resource(LogResource, '/logs/<string:id>')
+api.add_resource(MetricListResource, '/metrics')
+api.add_resource(MetricResource, '/metrics/<string:id>')
+api.add_resource(SchedulingListResource, '/schedulings')
+api.add_resource(SchedulingResource, '/schedulings/<string:id>')
+api.add_resource(RefreshTokenResource, '/auth/refresh_token')
+api.add_resource(UserListResource, '/users')
+api.add_resource(UserLoginResource, '/auth/login')
+api.add_resource(UserRegistrationResource, '/auth/signup')
+api.add_resource(UserResource, '/users/<string:username>')
 api.add_resource(WebhookSubscriptionListResource, '/webhooks')
 api.add_resource(WebhookSubscriptionResource, '/webhooks/<string:id>')
 
@@ -84,7 +94,7 @@ def unauthorized_handler(e):
     return jsonify({
         'status': 'error',
         'code': 401,
-        'messages': ['Unauthorized', str(e)],
+        'messages': [str(e)],
         'payload': {},
     }), 401
 

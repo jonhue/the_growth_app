@@ -5,6 +5,7 @@ from .fields import Fields
 
 class EventSchema(Schema):
     id = fields.String(dump_only=True)
+    user = fields.Nested('UserSchema', only=Fields.User.compact)
     datetime = fields.DateTime()
     created_at = fields.DateTime(dump_only=True)
 

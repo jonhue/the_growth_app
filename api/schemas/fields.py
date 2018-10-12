@@ -9,7 +9,7 @@ class Fields:
         default = ('id', 'inviter', 'invited', 'state', 'position', 'notifications', 'created_at')
         compact = ('id', 'inviter', 'invited', 'state', 'created_at')
     class Event:
-        default = ('id', 'datetime', 'created_at')
+        default = ('id', 'user', 'datetime', 'created_at')
         compact = ('id', 'datetime')
     class Goal:
         default = ('id', 'user', 'growthbook', 'scheduling', 'events', 'logs', 'name', 'state', 'position', 'created_at')
@@ -27,7 +27,7 @@ class Fields:
         default = ('id', 'user', 'growthbook', 'item', 'type', 'interval', 'attributes', 'created_at')
         compact = ('id', 'item', 'type', 'interval', 'attributes')
     class Scheduling:
-        default = ('id', 'type', 'time', 'ends_at', 'ends_after', 'created_at')
+        default = ('id', 'user', 'type', 'time', 'ends_at', 'ends_after', 'created_at')
         compact = ('id', 'type', 'time', 'ends_at', 'ends_after')
     class User:
         default = ('username', 'email', 'name', 'avatar', 'private', 'notifications', 'language', 'created_at')
