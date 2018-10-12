@@ -7,8 +7,8 @@ class MetricSchema(Schema):
     id = fields.String(dump_only=True)
     user = fields.Nested('UserSchema', only=Fields.User.compact)
     growthbook = fields.Nested('GrowthbookSchema', only=Fields.Growthbook.compact)
-    # item
-    # attributes
+    item = fields.Dict(dump_only=True)
+    attributes = fields.List(fields.String())
     created_at = fields.DateTime(dump_only=True)
 
     class Meta:

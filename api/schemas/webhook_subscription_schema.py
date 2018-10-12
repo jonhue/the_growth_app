@@ -7,7 +7,7 @@ class WebhookSubscriptionSchema(Schema):
     id = fields.String(dump_only=True)
     client = fields.Nested('ClientSchema', only=Fields.Client.compact)
     user = fields.Nested('UserSchema', only=Fields.User.compact)
-    # event_types
+    event_types = fields.List(fields.String())
     events = fields.Nested('WebhookEventSchema', many=True, only=Fields.WebhookEvent.compact)
     created_at = fields.DateTime(dump_only=True)
 
