@@ -12,7 +12,10 @@ class UserListResource(Resource):
     @jwt_required
     def get(self):
         schema = UserSchema(many=True, only=Fields.User.compact)
-        users = User.objects(private=False)
+        if 'q' in request.args:
+            users = User.objects(private=False, username__icontains=request.args['q'])
+        else:
+            users = User.objects(private=False)
 
         return respond(200, {'users': schema.dump(users).data})
 

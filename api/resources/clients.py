@@ -10,6 +10,15 @@ from .responses import respond
 
 class ClientListResource(Resource):
     @jwt_required
+    def get(self):
+        schema = ClientSchema(many=True, only=Fields.Client.compact)
+        user = User.objects.get(username=get_jwt_identity())
+        subscriptions = WebhookSubscription.objects.get(user=user)
+        clients = set(subscription.client for subscription in subscriptions)
+
+        return respond(200, {'clients': schema.dump(clients).data})
+
+    @jwt_required
     def post(self):
         schema = ClientSchema()
         client = Client(**schema.load(request.args).data)

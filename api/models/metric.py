@@ -14,6 +14,7 @@ class Metric(Document):
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     growthbook = ReferenceField(Growthbook, reverse_delete_rule=CASCADE, required=True)
     item = GenericReferenceField()
+    name = StringField(required=True)
     type = StringField(required=True, default=DEFAULT_TYPE)
     interval = StringField(required=True, default=DEFAULT_INTERVAL)
     attributes = SortedListField(StringField())
