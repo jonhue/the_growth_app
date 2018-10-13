@@ -24,7 +24,7 @@ class EventListResource(Resource):
             except (DoesNotExist, ValidationError) as e:
                 return respond(404, {}, ['Task does not exist', str(e)])
             growthbook = task.growthbook
-            metrics = task.events
+            events = task.events
 
         if get_jwt_identity() not in growthbook.collaborating_identities():
             return respond(403, {}, ['Access forbidden'])
