@@ -8,11 +8,11 @@ from .user import User
 
 class Growthbook(Document):
     INITIAL_STATE = 'active'
-    STATES = [INITIAL_STATE, 'archived']
+    STATES = (INITIAL_STATE, 'archived')
 
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     collaborations = ListField(EmbeddedDocumentField(Collaboration))
-    state = StringField(required=True, default=INITIAL_STATE)
+    state = StringField(required=True, default=INITIAL_STATE, choices=STATES)
     name = StringField(required=True)
     position = IntField(required=True)
     notifications = BooleanField(required=True, default=True)

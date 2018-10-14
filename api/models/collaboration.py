@@ -7,11 +7,11 @@ from .user import User
 
 class Collaboration(EmbeddedDocument):
     INITIAL_STATE = 'proposed'
-    STATES = [INITIAL_STATE, 'accepted']
+    STATES = (INITIAL_STATE, 'accepted')
 
     inviter = ReferenceField(User, required=True)
     invited = ReferenceField(User, required=True)
-    state = StringField(required=True, default=INITIAL_STATE)
+    state = StringField(required=True, default=INITIAL_STATE, choices=STATES)
     position = IntField(required=True)
     notifications = BooleanField(required=True, default=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())

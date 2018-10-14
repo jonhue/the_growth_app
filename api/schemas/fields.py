@@ -8,6 +8,9 @@ class Fields:
     class Collaboration:
         default = ('id', 'inviter', 'invited', 'state', 'position', 'notifications', 'created_at')
         compact = ('id', 'inviter', 'invited', 'state', 'created_at')
+    class Entity:
+        default = ('id', 'type', 'datapoints')
+        compact = ('id', 'type')
     class Event:
         default = ('id', 'user', 'growthbook', 'datetime', 'created_at')
         compact = ('id', 'datetime')
@@ -24,8 +27,8 @@ class Fields:
         default = ('id', 'user', 'content', 'attachments', 'created_at')
         compact = ('id', 'content', 'attachments')
     class Metric:
-        default = ('id', 'user', 'growthbook', 'item', 'type', 'interval', 'attributes', 'created_at')
-        compact = ('id', 'item', 'type', 'interval', 'attributes')
+        default = ('id', 'type', 'user', 'growthbook', 'item', 'entities', 'style', 'y_axis', 'x_axis', 'created_at')
+        compact = ('id', 'type', 'style')
     class Scheduling:
         default = ('id', 'user', 'type', 'time', 'ends_at', 'ends_after', 'created_at')
         compact = ('id', 'type', 'time', 'ends_at', 'ends_after')
@@ -38,3 +41,9 @@ class Fields:
     class WebhookSubscription:
         default = ('id', 'client', 'user', 'url', 'event_types', 'events', 'created_at')
         compact = ('id', 'url', 'event_types')
+    class XAxis:
+        default = ('id', 'interval', 'length', 'ends_at')
+        compact = ('id', 'interval', 'length')
+    class YAxis:
+        default = ('id', 'scale', 'max', 'min')
+        compact = ('id', 'scale')

@@ -5,11 +5,11 @@ from .user import User
 
 
 class Scheduling(EmbeddedDocument):
-    DEFAULT_TYPE = ''
-    TYPES = [DEFAULT_TYPE, '']
+    DEFAULT_TYPE = 'daily'
+    TYPES = (DEFAULT_TYPE, 'weekdays', 'weekends', 'weekly', 'monthly')
 
     user = ReferenceField(User, required=True)
-    type = StringField(required=True, default=DEFAULT_TYPE)
+    type = StringField(required=True, default=DEFAULT_TYPE, choices=TYPES)
     time = DateTimeField(required=True)
     ends_at = DateTimeField()
     ands_after = IntField()
