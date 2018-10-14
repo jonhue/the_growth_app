@@ -17,14 +17,20 @@ class MetricListResource(Resource):
                 growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
             except (DoesNotExist, ValidationError) as e:
                 return respond(404, {}, ['Growthbook does not exist', str(e)])
-            metrics = Metric.objects(growthbook=growthbook)
+            if 'q' in request.args:
+                metrics = Metric.objects(growthbook=growthbook, name__icontains=request.args['q'])
+            else:
+                metrics = Metric.objects(growthbook=growthbook)
         else:
             try:
                 item = globals()[request.args['item_type']].objects.get(id=request.args['item_id'])
             except (DoesNotExist, ValidationError) as e:
                 return respond(404, {}, ['Item does not exist', str(e)])
             growthbook = item.growthbook
-            metrics = Metric.objects(item=item)
+            if 'q' in request.args:
+                metrics = Metric.objects(item=item, name__icontains=request.args['q'])
+            else:
+                metrics = Metric.objects(item=item)
 
         if get_jwt_identity() not in growthbook.collaborating_identities():
             return respond(403, {}, ['Access forbidden'])

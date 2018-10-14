@@ -13,7 +13,10 @@ class GrowthbookListResource(Resource):
     def get(self):
         schema = GrowthbookSchema(many=True, only=Fields.Growthbook.compact)
         user = User.objects.get(username=get_jwt_identity())
-        growthbooks = Growthbook.objects(user=user)
+        if 'q' in request.args:
+            growthbooks = Growthbook.objects(user=user, name__icontains=request.args['q'])
+        else:
+            growthbooks = Growthbook.objects(user=user)
 
         return respond(200, {'growthbooks': schema.dump(growthbooks).data})
 

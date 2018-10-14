@@ -16,7 +16,10 @@ class GoalListResource(Resource):
             growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
         except (DoesNotExist, ValidationError) as e:
             return respond(404, {}, ['Growthbook does not exist', str(e)])
-        goals = Goal.objects(growthbook=growthbook)
+        if 'q' in request.args:
+            goals = Goal.objects(growthbook=growthbook, name__icontains=request.args['q'])
+        else:
+            goals = Goal.objects(growthbook=growthbook)
 
         if get_jwt_identity() not in growthbook.collaborating_identities():
             return respond(403, {}, ['Access forbidden'])

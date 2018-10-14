@@ -27,8 +27,8 @@ class Fields:
         default = ('id', 'user', 'content', 'attachments', 'created_at')
         compact = ('id', 'content', 'attachments')
     class Metric:
-        default = ('id', 'type', 'user', 'growthbook', 'item', 'entities', 'style', 'y_axis', 'x_axis', 'created_at')
-        compact = ('id', 'type', 'style')
+        default = ('id', 'type', 'user', 'growthbook', 'item', 'name', 'entities', 'style', 'y_axis', 'x_axis', 'created_at')
+        compact = ('id', 'name', 'type', 'style')
     class Scheduling:
         default = ('id', 'user', 'type', 'time', 'ends_at', 'ends_after', 'created_at')
         compact = ('id', 'type', 'time', 'ends_at', 'ends_after')

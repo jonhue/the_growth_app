@@ -17,14 +17,20 @@ class ActionItemListResource(Resource):
                 growthbook = Growthbook.objects.get(id=request.args['growthbook_id'])
             except (DoesNotExist, ValidationError) as e:
                 return respond(404, {}, ['Growthbook does not exist', str(e)])
-            action_items = ActionItem.objects(growthbook=growthbook)
+            if 'q' in request.args:
+                action_items = ActionItem.objects(growthbook=growthbook, title__icontains=request.args['q'])
+            else:
+                action_items = ActionItem.objects(growthbook=growthbook)
         else:
             try:
-                action_item = ActionItem.objects.get(id=request.args['action_item_id'])
+                action_item = ActionItem.objects.get(id=request.args['parent_id'])
             except (DoesNotExist, ValidationError) as e:
                 return respond(404, {}, ['Action item does not exist', str(e)])
             growthbook = action_item.growthbook
-            action_items = ActionItem.objects(parent=action_item)
+            if 'q' in request.args:
+                action_items = ActionItem.objects(parent=action_item, title__icontains=request.args['q'])
+            else:
+                action_items = ActionItem.objects(parent=action_item)
 
         if get_jwt_identity() not in growthbook.collaborating_identities():
             return respond(403, {}, ['Access forbidden'])

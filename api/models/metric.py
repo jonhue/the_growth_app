@@ -17,6 +17,7 @@ class Metric(Document):
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     growthbook = ReferenceField(Growthbook, reverse_delete_rule=CASCADE, required=True)
     item = GenericReferenceField()
+    name = StringField(required=True)
     entities = ListField(EmbeddedDocumentField(Entity))
     type = StringField(required=True, default=DEFAULT_TYPE, choices=TYPES)
     style = StringField(required=True, default=DEFAULT_STYLE, choices=STYLES)
