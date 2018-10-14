@@ -1,6 +1,7 @@
 from .action_item import ActionItem
 from .client import Client
 from .collaboration import Collaboration
+from .entity import Entity
 from .event import Event
 from .goal import Goal
 from .growthbook import Growthbook
@@ -11,3 +12,5 @@ from .scheduling import Scheduling
 from .user import User
 from .webhook_event import WebhookEvent
 from .webhook_subscription import WebhookSubscription
+from .x_axis import XAxis
+from .y_axis import YAxis

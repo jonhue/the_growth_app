@@ -7,7 +7,7 @@ from .user import User
 
 
 class WebhookSubscription(Document):
-    EVENT_TYPES = ['event.created']
+    EVENT_TYPES = ('event.created')
 
     client = ReferenceField(Client, reverse_delete_rule=CASCADE, required=True)
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)

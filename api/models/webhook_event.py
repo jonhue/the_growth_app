@@ -7,7 +7,7 @@ from .webhook_subscription import WebhookSubscription
 
 class WebhookEvent(Document):
     users = ListField(ReferenceField(User))
-    type = StringField(required=True)
+    type = StringField(required=True, choices=WebhookSubscription.EVENT_TYPES)
     payload = DictField(required=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 

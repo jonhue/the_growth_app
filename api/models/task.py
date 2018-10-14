@@ -10,13 +10,13 @@ from .user import User
 
 class Task(Document):
     INITIAL_STATE = 'active'
-    STATES = [INITIAL_STATE, 'done']
+    STATES = (INITIAL_STATE, 'done')
 
     user = ReferenceField(User, reverse_delete_rule=CASCADE, required=True)
     growthbook = ReferenceField(Growthbook, reverse_delete_rule=CASCADE, required=True)
     scheduling = EmbeddedDocumentField(Scheduling)
     events = SortedListField(EmbeddedDocumentField(Event))
-    state = StringField(required=True, default=INITIAL_STATE)
+    state = StringField(required=True, default=INITIAL_STATE, choices=STATES)
     position = IntField(required=True)
     created_at = DateTimeField(required=True, default=dt.datetime.now())
 
