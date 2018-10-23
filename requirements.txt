@@ -1,7 +1,7 @@
 Flask==1.0.2
 Flask-JWT-Extended==3.13.1
 Flask-RESTful==0.3.6
-marshmallow==2.16.0
+marshmallow==2.16.1
 mongoengine==0.15.3
 passlib==1.7.1
 requests==2.20.0
