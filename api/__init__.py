@@ -4,7 +4,7 @@ from flask_restful import Api
 from mongoengine import connect
 import os
 
-from .resources import *
+from .resources.v1 import *
 
 
 connect('thegrowthapp', host='mongodb', port=27017)
@@ -15,31 +15,31 @@ app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 jwt = JWTManager(app)
 api = Api(app)
 
-api.add_resource(ActionItemListResource, '/action_items')
-api.add_resource(ActionItemResource, '/action_items/<string:id>')
-api.add_resource(ClientListResource, '/clients')
-api.add_resource(ClientResource, '/clients/<string:id>')
-api.add_resource(CollaborationListResource, '/collaborations')
-api.add_resource(CollaborationResource, '/collaborations/<string:id>')
-api.add_resource(EventListResource, '/events')
-api.add_resource(EventResource, '/events/<string:id>')
-api.add_resource(GoalListResource, '/goals')
-api.add_resource(GoalResource, '/goals/<string:id>')
-api.add_resource(GrowthbookListResource, '/growthbooks')
-api.add_resource(GrowthbookResource, '/growthbooks/<string:id>')
-api.add_resource(LogListResource, '/logs')
-api.add_resource(LogResource, '/logs/<string:id>')
-api.add_resource(MetricListResource, '/metrics')
-api.add_resource(MetricResource, '/metrics/<string:id>')
-api.add_resource(SchedulingListResource, '/schedulings')
-api.add_resource(SchedulingResource, '/schedulings/<string:id>')
-api.add_resource(RefreshTokenResource, '/auth/refresh_token')
-api.add_resource(UserListResource, '/users')
-api.add_resource(UserLoginResource, '/auth/login')
-api.add_resource(UserRegistrationResource, '/auth/signup')
-api.add_resource(UserResource, '/users/<string:username>')
-api.add_resource(WebhookSubscriptionListResource, '/webhooks')
-api.add_resource(WebhookSubscriptionResource, '/webhooks/<string:id>')
+api.add_resource(ActionItemListResource, '/v1/action_items')
+api.add_resource(ActionItemResource, '/v1/action_items/<string:id>')
+api.add_resource(ClientListResource, '/v1/clients')
+api.add_resource(ClientResource, '/v1/clients/<string:id>')
+api.add_resource(CollaborationListResource, '/v1/collaborations')
+api.add_resource(CollaborationResource, '/v1/collaborations/<string:id>')
+api.add_resource(EventListResource, '/v1/events')
+api.add_resource(EventResource, '/v1/events/<string:id>')
+api.add_resource(GoalListResource, '/v1/goals')
+api.add_resource(GoalResource, '/v1/goals/<string:id>')
+api.add_resource(GrowthbookListResource, '/v1/growthbooks')
+api.add_resource(GrowthbookResource, '/v1/growthbooks/<string:id>')
+api.add_resource(LogListResource, '/v1/logs')
+api.add_resource(LogResource, '/v1/logs/<string:id>')
+api.add_resource(MetricListResource, '/v1/metrics')
+api.add_resource(MetricResource, '/v1/metrics/<string:id>')
+api.add_resource(SchedulingListResource, '/v1/schedulings')
+api.add_resource(SchedulingResource, '/v1/schedulings/<string:id>')
+api.add_resource(RefreshTokenResource, '/v1/auth/refresh_token')
+api.add_resource(UserListResource, '/v1/users')
+api.add_resource(UserLoginResource, '/v1/auth/login')
+api.add_resource(UserRegistrationResource, '/v1/auth/signup')
+api.add_resource(UserResource, '/v1/users/<string:username>')
+api.add_resource(WebhookSubscriptionListResource, '/v1/webhooks')
+api.add_resource(WebhookSubscriptionResource, '/v1/webhooks/<string:id>')
 
 
 
