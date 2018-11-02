@@ -2,8 +2,8 @@ from flask import request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restful import Resource
 
-from ..models import Growthbook, User
-from ..schemas import GrowthbookSchema
+from ...models import Growthbook, User
+from ...schemas import GrowthbookSchema
 
 from .responses import respond
 
