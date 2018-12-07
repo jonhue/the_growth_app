@@ -1,5 +1,5 @@
 Flask==1.0.2
-Flask-JWT-Extended==3.13.1
+Flask-JWT-Extended==3.14.0
 Flask-RESTful==0.3.6
 marshmallow==2.16.3
 mongoengine==0.16.2
