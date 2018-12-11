@@ -4,5 +4,5 @@ Flask-RESTful==0.3.6
 marshmallow==2.16.3
 mongoengine==0.16.3
 passlib==1.7.1
-requests==2.20.1
+requests==2.21.0
 transitions==0.6.9
